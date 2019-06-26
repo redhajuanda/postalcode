@@ -5,15 +5,21 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
-func handleRequests() {
-	r := mux.NewRouter()
-	r.HandleFunc("/", homePage).Methods("GET")
-	r.HandleFunc("/address/{postal_code}", singleAddress).Methods("GET")
-	log.Fatal(http.ListenAndServe(":3000", r))
+// init is invoked before main()
+func init() {
+	// loads values from .env into the system
+	if err := godotenv.Load(); err != nil {
+		log.Print("No .env file found")
+	}
 }
 
 func main() {
-	handleRequests()
+
+	db := connect()
+	mux := mux.NewRouter()
+	app := newApp(db, mux)
+	http.ListenAndServe(":3000", app.mux)
 }
