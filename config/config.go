@@ -22,7 +22,7 @@ func New() *Config {
 	return &Config{
 		DB: DBConfig{
 			Username: getEnv("DB_USERNAME", "root"),
-			Password: getEnv("DB_PASSWORD", "rezareza123"),
+			Password: getEnv("DB_PASSWORD", ""),
 			Host:     getEnv("DB_HOST", "localhost"),
 			Database: getEnv("DB_NAME", "kodepos"),
 		},

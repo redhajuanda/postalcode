@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 
@@ -16,10 +17,27 @@ func init() {
 	}
 }
 
-func main() {
+type App struct {
+	db  *sql.DB
+	mux *mux.Router
+}
 
+func main() {
 	db := connect()
 	mux := mux.NewRouter()
 	app := newApp(db, mux)
-	http.ListenAndServe(":3000", app.mux)
+	err := http.ListenAndServe(":5000", app.mux)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }
+
+func newApp(db *sql.DB, mux *mux.Router) *App {
+	a := App{db, mux}
+	a.handleRequests()
+	return &a
+}
+
+// func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+// 	a.mux.ServeHTTP(w, r)
+// }

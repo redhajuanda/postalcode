@@ -9,11 +9,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func singleAddress(w http.ResponseWriter, r *http.Request) {
+func (a *App) singleAddress(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["postal_code"]
-	db := connect()
-	defer db.Close()
+	db := a.db
 
 	var postal_code PostalCode
 	var arr_postal_code []PostalCode
